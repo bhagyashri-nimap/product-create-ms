@@ -6,9 +6,6 @@ var productSchema = Schema({
     },
     productName: {
         type: String
-    },
-    accessToken:{
-        type: String
     }
 });
 var productData = mongoose.model('Product', productSchema);
