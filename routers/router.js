@@ -3,9 +3,10 @@ var express = require('express');
 var router = express.Router()
 var productService = require('../controllers/ProductController')
 
-router.use((req, res, next) => {
+router.all("/:apiName",(req, res,next) => {
     console.log("Called: ", req.path)
-    next()
+      next()
+   
 })
 
 router.use(productService)

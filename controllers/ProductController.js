@@ -17,14 +17,18 @@ router.post("/save", async (req, res) => {
     }
 }),
 router.get("/getAll", authenticateUser,async (req, res) => {
+    console.log("req.body",req.headers.accesstoken)
     try {
-        var data = await ProductModel.getAll(req.body)
+        var data = await ProductModel.getAll(req.headers.accesstoken)
         if (data.value) {
+            console.log("data1",data)
             res.status(200).json(data.data)
         } else {
+            console.log("data2",data)
             res.status(500).json(data)
         }
     } catch (error) {
+        console.log("data3",error)
         res.status(500).send(error)
     }
 }),

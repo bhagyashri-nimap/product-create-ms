@@ -2,14 +2,17 @@
 var { productData } = require('../mongooseModel/Product.js');
 var { userData } = require('../mongooseModel/User.js');
 require('dotenv').config();
+const request = require('request');
 var _ = require('lodash');
 var jwt = require("jsonwebtoken")
 var jwtDecode = require("jwt-decode")
 var sha256 = require("js-sha256").sha256
+var axios = require("axios")
 var jwtKey = process.env.JWT_KEY
-exports.getAll = async function (data) {
-   
-    const checkProduct= await productData.find({
+exports.getAll = async function (accesstoken) {
+    var arry = [];
+   var metaObj=[]
+    var checkProduct= await productData.find({
     })
     if (_.isEmpty(checkProduct)) {
         return {
@@ -17,10 +20,57 @@ exports.getAll = async function (data) {
             value: false
         }
     }
+    var getPriceData = await axios.get('http://localhost:3001/getAll',{
+          headers: {
+              'Content-Type': 'application/json',
+              'accessToken': accesstoken
+          },      
+      })      
+      .then((response) => {
+        console.log('response',response.data)
+       return response.data
+      })
+      .catch((error) => {
+        console.log('error',error)
+        return error.response
+      })
+      var getStockData = await axios.get('http://localhost:3002/getAll',{
+        headers: {
+            'Content-Type': 'application/json',
+            'accessToken': accesstoken
+        },      
+    })      
+    .then((response) => {
+      console.log('response',response.data)
+     return response.data
+    })
+    .catch((error) => {
+      console.log('error',error)
+      return error.response
+    })
+    arry = arry.concat(checkProduct).concat(getPriceData).concat(getStockData)
+    console.log("arry",arry)
+    var grounByPhase = _.groupBy(arry, "productSku");
+    console.log(grounByPhase,"grounByPhase") 
+    _.each(grounByPhase, (value, key) => {
+    //     _.each(value,(item)=>{
+    //    var grounBy = _.groupBy(value, "productSku");
+    //   console.log("grounBy",grounBy)
+     
+    //         })
+
+      console.log("result",result)
+     metaObj.push({
+        productSku: key,
+          value: value,
+        })
+      });
        return {
-           data: checkProduct,
+           data: metaObj,
            value: true
+        
        }
+   
 },
 exports.save = async function (data) {
     let saveProduct
@@ -175,3 +225,56 @@ generateAccessToken=function(userAvailable) {
         value: true
     }
 }
+
+// gget= function(accesstoken) {
+//     console.log("accesstoken",accesstoken)
+//     console.log("accesstoken",accesstoken)
+    
+
+
+//     var resBody
+//     var url = "http://localhost:3001/getAll"
+//     var options = {
+//         method: "GET",
+//         url: url,
+//         headers: {
+//             accessToken: accesstoken
+//         }
+//     }
+//      request(options, function (err, response, body) {
+//         if (err) {
+//             console.log("err",err)
+//             return err
+//         } else if(body) {
+//         console.log("body",body)
+//         resBody=JSON.parse(body)
+//         console.log("resBody",resBody)
+
+//         arry = arry.concat(checkProduct).concat(resBody)
+//         console.log(arry) 
+//         var grounByPhase = _.groupBy(arry, "productSku");
+//         console.log(grounByPhase,"grounByPhase") 
+//         _.each(grounByPhase, (value, key) => {
+//         //     _.each(value,(item)=>{
+//         //     console.log(item.productSku)
+               
+//         //     //  var itemArry=[]
+//         //     //  itemArry.push(item)
+//         //     //  console.log("metaObj11",metaObj)
+//         // //    var grounBy = _.groupBy(item, "productSku");
+//         // //   console.log("grounBy",grounBy)
+         
+//         //         })
+//          metaObj.push({
+//                name: key,
+//               value: value,
+//             })
+//           });
+//       console.log("metaObj",metaObj)
+      
+//         }
+      
+        
+//     })
+    
+// }

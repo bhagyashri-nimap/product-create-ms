@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bhagyashri-nimap/product-create-ms#readme",
   "dependencies": {
+    "axios": "^0.22.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -27,6 +28,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "mongoose": "^6.0.8",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "request": "^2.88.2"
   }
 }
