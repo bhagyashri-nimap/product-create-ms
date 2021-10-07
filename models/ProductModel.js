@@ -2,7 +2,6 @@
 var { productData } = require('../mongooseModel/Product.js');
 var { userData } = require('../mongooseModel/User.js');
 require('dotenv').config();
-const request = require('request');
 var _ = require('lodash');
 var jwt = require("jsonwebtoken")
 var jwtDecode = require("jwt-decode")
