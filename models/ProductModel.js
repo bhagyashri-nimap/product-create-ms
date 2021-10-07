@@ -199,7 +199,6 @@ exports.login = async function (data) {
         return accessTokenOutput
 },
 generateAccessToken=function(userAvailable) {
-    console.log("userAvailable", userAvailable)
     let objToGenerateAccessToken = {
         _id: userAvailable._id,
         name: userAvailable.name,
